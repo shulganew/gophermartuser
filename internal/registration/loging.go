@@ -33,7 +33,7 @@ func UserLogin(ctx context.Context, conn *pgx.Conn) {
 
 	reqBodyDel := bytes.NewBuffer([]byte{})
 
-	nUser := 0
+	nUser := 1
 
 	err = json.NewEncoder(reqBodyDel).Encode(&users[nUser])
 	if err != nil {
