@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"gophermarketuser/internal/model"
+	"gophermarketuser/internal/service"
 	"io"
 	"log"
 	"net/http"
@@ -23,7 +24,7 @@ func GetOrders(ctx context.Context, conn *pgx.Conn) {
 
 	fmt.Println("Set Order")
 
-	user := getUser(ctx, conn)
+	user := service.GetUser(ctx, conn)
 
 	fmt.Println("Set Order for User", user.Login)
 
@@ -63,7 +64,7 @@ func GetOrders(ctx context.Context, conn *pgx.Conn) {
 func SetOrders(ctx context.Context, conn *pgx.Conn) {
 	fmt.Println("Set Order")
 
-	user := getUser(ctx, conn)
+	user := service.GetUser(ctx, conn)
 
 	fmt.Println("Set Order for Login", user.Login)
 
@@ -110,7 +111,7 @@ func SetOrders(ctx context.Context, conn *pgx.Conn) {
 
 	fmt.Println("========================================")
 	fmt.Println("=================Accural================")
-	goods := LoadGoods(ctx, conn, 2)
+	goods := LoadGoods(ctx, conn, 1)
 
 	reqAcc := RequestAccural{Order: onumber, Goods: goods}
 	jsonAccural, err := json.Marshal(reqAcc)
@@ -179,20 +180,6 @@ func SetOrders(ctx context.Context, conn *pgx.Conn) {
 
 	fmt.Println("Body: ", string(body))
 	fmt.Printf("Status Code: %d\r\n", res.StatusCode)
-
-}
-
-func getUser(ctx context.Context, conn *pgx.Conn) *model.User {
-
-	row := conn.QueryRow(ctx, "SELECT jwt, login, password FROM users ORDER BY random() LIMIT 1")
-
-	var user model.User
-	err := row.Scan(&user.JWT, &user.Login, &user.Password)
-	if err != nil {
-		panic(fmt.Errorf("Scan error %w", err))
-	}
-
-	return &user
 
 }
 

@@ -10,4 +10,4 @@ CREATE TABLE goods (
     price INT NOT NULL DEFAULT 0);
     
 
-\copy goods(description, price)  FROM '/home/igor/Desktop/code/gophermartuser/db/goods.csv' DELIMITER ';' CSV HEADER;
+--\copy goods(description, price)  FROM '/home/igor/Desktop/code/gophermartuser/db/goods.csv' DELIMITER ';' CSV HEADER;

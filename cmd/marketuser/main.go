@@ -4,6 +4,7 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	"gophermarketuser/internal/balance"
 	"gophermarketuser/internal/db"
 	"gophermarketuser/internal/orders"
 	"gophermarketuser/internal/registration"
@@ -43,6 +44,12 @@ func main() {
 		orders.GetOrders(ctx, conn)
 	case 4:
 		orders.SetOrders(ctx, conn)
+	case 5:
+		balance.GetBalance(ctx, conn)
+	case 6:
+		balance.SetWithdraw(ctx, conn)
+	case 7:
+		balance.GetWithdrawals(ctx, conn)
 	}
 
 }
