@@ -17,13 +17,13 @@ func GetWithdrawals(ctx context.Context, conn *pgx.Conn) {
 	user := service.GetUser(ctx, conn)
 
 	client := &http.Client{}
-	request, err := http.NewRequest(http.MethodGet, "http://localhost:8090/api/user/withdrawals", nil)
+	request, err := http.NewRequest(http.MethodGet, "http://localhost:8088/api/user/withdrawals", nil)
 	if err != nil {
 		fmt.Println(err)
 	}
 
 	// add jwt
-	request.Header.Add("Authorization", "Bearer "+user.JWT.String)
+	request.Header.Add("Authorization", user.JWT.String)
 
 	//reqest
 	request.Header.Add("Content-Type", "text/plain")

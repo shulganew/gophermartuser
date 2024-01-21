@@ -11,7 +11,6 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/ShiraazMoollatjie/goluhn"
 	"github.com/jackc/pgx/v5"
 )
 
@@ -29,13 +28,13 @@ func GetOrders(ctx context.Context, conn *pgx.Conn) {
 	fmt.Println("Set Order for User", user.Login)
 
 	client := &http.Client{}
-	request, err := http.NewRequest(http.MethodGet, "http://localhost:8090/api/user/orders", nil)
+	request, err := http.NewRequest(http.MethodGet, "http://localhost:8088/api/user/orders", nil)
 	if err != nil {
 		fmt.Println(err)
 	}
 
 	// add jwt
-	request.Header.Add("Authorization", "Bearer "+user.JWT.String)
+	request.Header.Add("Authorization", user.JWT.String)
 
 	//reqest
 	request.Header.Add("Content-Type", "text/plain")
@@ -69,21 +68,21 @@ func SetOrders(ctx context.Context, conn *pgx.Conn) {
 	fmt.Println("Set Order for Login", user.Login)
 
 	// Generate luna number for order
-	onumber := goluhn.Generate(10)
-	//onumber := "625042411"
+	//onumber := goluhn.Generate(10)
+	onumber := "0265410704"
 
 	fmt.Println("Order Number: ", onumber)
 
 	order := bytes.NewBuffer([]byte(onumber))
 
 	client := &http.Client{}
-	request, err := http.NewRequest(http.MethodPost, "http://localhost:8090/api/user/orders", order)
+	request, err := http.NewRequest(http.MethodPost, "http://localhost:8088/api/user/orders", order)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
 	// add jwt
-	request.Header.Add("Authorization", "Bearer "+user.JWT.String)
+	request.Header.Add("Authorization", user.JWT.String)
 
 	//reqest
 	request.Header.Add("Content-Type", "text/plain")
@@ -123,7 +122,7 @@ func SetOrders(ctx context.Context, conn *pgx.Conn) {
 	bodyAcc := bytes.NewReader(jsonAccural)
 
 	client = &http.Client{}
-	request, err = http.NewRequest(http.MethodPost, "http://localhost:8080/api/orders", bodyAcc)
+	request, err = http.NewRequest(http.MethodPost, "http://localhost:8090/api/orders", bodyAcc)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -155,7 +154,7 @@ func SetOrders(ctx context.Context, conn *pgx.Conn) {
 	fmt.Println("=================Accural Check ================")
 
 	client = &http.Client{}
-	request, err = http.NewRequest(http.MethodGet, "http://localhost:8080/api/orders/"+onumber, nil)
+	request, err = http.NewRequest(http.MethodGet, "http://localhost:8090/api/orders/"+onumber, nil)
 	if err != nil {
 		log.Fatalln(err)
 	}

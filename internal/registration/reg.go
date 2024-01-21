@@ -26,7 +26,7 @@ func UserReg(ctx context.Context, conn *pgx.Conn) {
 	}
 
 	client := &http.Client{}
-	request, err := http.NewRequest(http.MethodPost, "http://localhost:8090/api/user/register", reqBodyDel)
+	request, err := http.NewRequest(http.MethodPost, "http://localhost:8088/api/user/register", reqBodyDel)
 	if err != nil {
 		fmt.Println(err)
 	}

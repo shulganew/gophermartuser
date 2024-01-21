@@ -10,6 +10,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/ShiraazMoollatjie/goluhn"
 	"github.com/jackc/pgx/v5"
 )
 
@@ -26,12 +27,11 @@ func SetWithdraw(ctx context.Context, conn *pgx.Conn) {
 	fmt.Println("Set Order for Login", user.Login)
 
 	// Generate luna number for order
-
-	onumber := "0267010072"
+	onumber := goluhn.Generate(10)
 
 	fmt.Println("Order Number: ", onumber)
 
-	sum := 1000.0
+	sum := 20.0
 	wd := Withdraw{Onumber: onumber, Withdrawn: sum}
 
 	jsonWs, err := json.Marshal(wd)
@@ -41,13 +41,13 @@ func SetWithdraw(ctx context.Context, conn *pgx.Conn) {
 
 	jbody := bytes.NewReader(jsonWs)
 	client := &http.Client{}
-	request, err := http.NewRequest(http.MethodPost, "http://localhost:8090/api/user/balance/withdraw", jbody)
+	request, err := http.NewRequest(http.MethodPost, "http://localhost:8088/api/user/balance/withdraw", jbody)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
 	// add jwt
-	request.Header.Add("Authorization", "Bearer "+user.JWT.String)
+	request.Header.Add("Authorization", user.JWT.String)
 
 	//reqest
 	request.Header.Add("Content-Type", "application/json")

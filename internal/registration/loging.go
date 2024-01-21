@@ -41,13 +41,13 @@ func UserLogin(ctx context.Context, conn *pgx.Conn) {
 	}
 
 	client := &http.Client{}
-	request, err := http.NewRequest(http.MethodPost, "http://localhost:8090/api/user/login", reqBodyDel)
+	request, err := http.NewRequest(http.MethodPost, "http://localhost:8088/api/user/login", reqBodyDel)
 	if err != nil {
 		fmt.Println(err)
 	}
 
 	// add jwt
-	request.Header.Add("Authorization", "Bearer "+users[nUser].JWT.String)
+	request.Header.Add("Authorization", users[nUser].JWT.String)
 
 	//reqest
 	request.Header.Add("Content-Type", "application/json")
@@ -71,7 +71,8 @@ func UserLogin(ctx context.Context, conn *pgx.Conn) {
 	fmt.Println("Body: ", string(body))
 	fmt.Printf("Status Code: %d\r\n", res.StatusCode)
 
-	jwt := res.Header.Get("Authorization")[len("Bearer "):]
+	//jwt := res.Header.Get("Authorization")[len("Bearer "):]
+	jwt := res.Header.Get("Authorization")
 
 	_, err = conn.Exec(ctx, "UPDATE users SET jwt = $1", jwt)
 	if err != nil {
